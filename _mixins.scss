@@ -1,0 +1,347 @@
+// Author: Tushar Shukla
+// Github Repo: https://github.com/tusharshuklaa/SAAS-Mixin-Collection
+
+/* #region Make a box */
+/*
+    Name: Size
+    Desc: Create a box by providing width and height. If height is not provided then it uses width value as height
+    Usage: 
+    .my-rectangle {
+        @include size(400px, 200px);
+    }
+    .my-square {
+        @include size(400px);
+    }
+*/
+
+@mixin size($width, $height: $width) {
+    width: $width;
+    height: $height;
+}
+
+/* #endregion */
+
+
+/* #region Position */
+/*
+    Name: Position
+    Desc: Define position of an element as relative, absolute or fixed with top, left, margin etc values in no specific order
+    Usage: 
+    .float-btn {
+        @include position("fixed" top 100px right 5px);
+    }
+*/
+
+@mixin position($position, $args) {
+    @each $o in top right bottom left {
+        $i: index($args, $o);
+        @if $i and $i+1 <=length($args) and type-of(nth($args, $i + 1))==number {
+            #{$o}: nth($args, $i + 1);
+        }
+    }
+    position: $position;
+}
+
+/* *******************************************
+    Name: Absolute
+    Desc: Define position of an element as absolute with top, left, margin etc values in no specific order
+    Dependent on: Position
+    Usage: 
+    .float-btn {
+        @include absolute(top 100px right 5px);
+    }
+*/
+
+@mixin absolute($args) {
+    @include position("absolute", $args);
+}
+
+/* *******************************************
+
+Name: Fixed
+Desc: Define position of an element as fixed with top, left, margin etc values in no specific order
+Dependent on: Position
+Usage: 
+.float-btn {
+    @include fixed(top 100px right 5px);
+}
+
+*/
+
+@mixin fixed($args) {
+    @include position("fixed", $args);
+}
+
+/* #endregion */
+
+
+
+
+/* ******************************************* */
+
+/*
+Position mixin
+Usage:
+.element {
+@include absolute(top 0 left 1em);
+}
+*/
+
+@mixin position($position, $args) {
+    @each $o in top right bottom left {
+        $i: index($args, $o);
+        @if $i and $i+1 <=length($args) and type-of(nth($args, $i + 1))==number {
+            #{$o}: nth($args, $i + 1);
+        }
+    }
+    position: $position;
+}
+
+@mixin absolute($args) {
+    @include position("absolute", $args);
+}
+
+@mixin fixed($args) {
+    @include position("fixed", $args);
+}
+
+@mixin relative($args) {
+    @include position("relative", $args);
+}
+
+/* ******************************************* */
+
+/*
+Prefix mixin
+Usage:
+.other-element {
+@include prefix((
+  column-count: 3,
+  column-gap: 1em,
+  column-rule: 1px solid silver,
+  column-width: 20em
+)), webkit moz);
+}
+*/
+
+@mixin prefix($map, $vendors: webkit moz ms o) {
+    @each $prop,
+    $value in $map {
+        @if $vendors {
+            @each $vendor in $vendors {
+                #{"-" + $vendor + "-" + $prop}: #{$value};
+            }
+        } // Dump regular property anyway
+        #{$prop}: #{$value};
+    }
+}
+
+/* ******************************************* */
+
+/*
+Breakpoints mixin
+Usage:
+.element {
+color: red;
+
+@include breakpoint(medium) {
+  color: blue;
+}
+}
+*/
+
+$breakpoints: ( 'tiny' : ( max-width : 767px), 'small' : ( min-width : 768px), 'small1': ( max-width: 1023px), 'medium': ( min-width : 992px), 'large' : ( min-width: 1200px), 'custom': ( min-height : 40em));
+@mixin breakpoint($minname, $maxname: "") {
+    @if map-has-key($breakpoints, $minname) {
+        @if map-has-key($breakpoints, $maxname) {
+            @media #{inspect(map-get($breakpoints, $minname))} and #{inspect(map-get($breakpoints, $maxname))} {
+                @content;
+            }
+        }
+        @else {
+            @media #{inspect(map-get($breakpoints, $minname))} {
+                @content;
+            }
+        }
+    }
+    @else {
+        @warn "Couldn't find a breakpoint named `#{$minname}`.";
+    }
+}
+
+/* ******************************************* */
+
+/*
+Opacity mixin
+Usage:
+.faded-text {
+@include opacity(0.8);
+}
+*/
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+/* ******************************************* */
+
+/*
+
+*/
+
+// --------------------------------------------------
+// Flexbox SASS mixins
+// The spec: http://www.w3.org/TR/css3-flexbox
+// --------------------------------------------------
+// Flexbox display
+@mixin flexbox() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+// The 'flex' shorthand
+// - applies to: flex items
+// <positive-number>, initial, auto, or none
+@mixin flex($values) {
+    -webkit-box-flex: $values;
+    -moz-box-flex: $values;
+    -webkit-flex: $values;
+    -ms-flex: $values;
+    flex: $values;
+}
+
+// Flex Flow Direction
+// - applies to: flex containers
+// row | row-reverse | column | column-reverse
+@mixin flex-direction($direction) {
+    -webkit-flex-direction: $direction;
+    -moz-flex-direction: $direction;
+    -ms-flex-direction: $direction;
+    flex-direction: $direction;
+}
+
+// Flex Line Wrapping
+// - applies to: flex containers
+// nowrap | wrap | wrap-reverse
+@mixin flex-wrap($wrap) {
+    -webkit-flex-wrap: $wrap;
+    -moz-flex-wrap: $wrap;
+    -ms-flex-wrap: $wrap;
+    flex-wrap: $wrap;
+}
+
+// Flex Direction and Wrap
+// - applies to: flex containers
+// <flex-direction> || <flex-wrap>
+@mixin flex-flow($flow) {
+    -webkit-flex-flow: $flow;
+    -moz-flex-flow: $flow;
+    -ms-flex-flow: $flow;
+    flex-flow: $flow;
+}
+
+// Display Order
+// - applies to: flex items
+// <integer>
+@mixin order($val) {
+    -webkit-box-ordinal-group: $val;
+    -moz-box-ordinal-group: $val;
+    -ms-flex-order: $val;
+    -webkit-order: $val;
+    order: $val;
+}
+
+// Flex grow factor
+// - applies to: flex items
+// <number>
+@mixin flex-grow($grow) {
+    -webkit-flex-grow: $grow;
+    -moz-flex-grow: $grow;
+    -ms-flex-grow: $grow;
+    flex-grow: $grow;
+}
+
+// Flex shrink
+// - applies to: flex item shrink factor
+// <number> 
+@mixin flex-shrink($shrink) {
+    -webkit-flex-shrink: $shrink;
+    -moz-flex-shrink: $shrink;
+    -ms-flex-shrink: $shrink;
+    flex-shrink: $shrink;
+}
+
+// Flex basis
+// - the initial main size of the flex item
+// - applies to: flex itemsnitial main size of the flex item
+// <width> 
+@mixin flex-basis($width) {
+    -webkit-flex-basis: $width;
+    -moz-flex-basis: $width;
+    -ms-flex-basis: $width;
+    flex-basis: $width;
+}
+
+// Axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | space-between | space-around 
+@mixin justify-content($justify) {
+    -webkit-justify-content: $justify;
+    -moz-justify-content: $justify;
+    -ms-justify-content: $justify;
+    justify-content: $justify;
+    -ms-flex-pack: $justify;
+}
+
+// Packing Flex Lines
+// - applies to: multi-line flex containers
+// flex-start | flex-end | center | space-between | space-around | stretch 
+@mixin align-content($align) {
+    -webkit-align-content: $align;
+    -moz-align-content: $align;
+    -ms-align-content: $align;
+    align-content: $align;
+}
+
+// Cross-axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | baseline | stretch 
+@mixin align-items($align) {
+    -webkit-align-items: $align;
+    -moz-align-items: $align;
+    -ms-align-items: $align;
+    align-items: $align;
+}
+
+// Cross-axis Alignment
+// - applies to: flex items
+// auto | flex-start | flex-end | center | baseline | stretch 
+@mixin align-self($align) {
+    -webkit-align-self: $align;
+    -moz-align-self: $align;
+    -ms-align-self: $align;
+    align-self: $align;
+}
+
+/* ******************************************* */
+
+/*
+Name: Truncate String
+Desc: Pass max-width (for example: 200px) and text within should have ellipsis effect applied to it
+Usage:
+.title-text {
+@include truncateString(200px);
+}
+*/
+
+@mixin truncateString($max-width) {
+    max-width: $max-width;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
