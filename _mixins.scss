@@ -1,9 +1,12 @@
 // Author: Tushar Shukla
 // Github Repo: https://github.com/tusharshuklaa/SAAS-Mixin-Collection
+// Disclaimer: All the mixins mentioned in this file are either written by me or taken from online sources such as stackoverflow, css-tricks and articles. 
+// Some of them also have been taken from somewhere and then modified by me as per my needs. 
+// If someone happens to own some piece of it, let me know and I'll add the reference to it.
 
 /* #region Make a box */
 /*
-    Name: Size
+    Name: Box
     Desc: Create a box by providing width and height. If height is not provided then it uses width value as height
     Usage: 
     .my-rectangle {
@@ -14,7 +17,7 @@
     }
 */
 
-@mixin size($width, $height: $width) {
+@mixin box($width, $height: $width) {
     width: $width;
     height: $height;
 }
@@ -345,3 +348,31 @@ Usage:
     white-space: nowrap;
     overflow: hidden;
 }
+
+/* ******************************************* */
+
+@mixin optional-at-root($sel) {
+    @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+        @content;
+    }
+}
+
+@mixin placeholder {
+    @include optional-at-root('::-webkit-input-placeholder') {
+        @content;
+    }
+
+    @include optional-at-root(':-moz-placeholder') {
+        @content;
+    }
+
+    @include optional-at-root('::-moz-placeholder') {
+        @content;
+    }
+
+    @include optional-at-root(':-ms-input-placeholder') {
+        @content;
+    }
+}
+
+/* ******************************************* */
