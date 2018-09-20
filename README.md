@@ -27,7 +27,7 @@ You can send me an email at [tusharshuklaa@gmail.com](mailto:tusharshuklaa@gmail
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/tusharshuklaa/b24679402957c63ec426) for details on code of conduct, and the process for submitting pull requests.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code of conduct, and the process for submitting pull requests.
 
 ## Acknowledgments
 
