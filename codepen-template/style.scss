@@ -1,0 +1,266 @@
+/* _variables */
+
+$pad: 10px;
+$family: monospace;
+$background: #263238;
+$codeBg: #1c1d21;
+$codeFamily: Consolas,
+Menlo,
+Monaco,
+Lucida Console,
+Liberation Mono,
+DejaVu Sans Mono,
+Bitstream Vera Sans Mono,
+Courier New,
+monospace,
+serif;
+$selColor: #00e676;
+$color1: #e3f2fd;
+$color2: #b1bfca;
+$color3: #ffffff;
+
+/* _variables end */
+
+/* default styles */
+
+@mixin selection() {
+  &::-moz-selection {
+    background-color: $selColor;
+  }
+
+  &::selection {
+    background-color: $selColor;
+  }
+}
+
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin justify-content($justify) {
+  -webkit-justify-content: $justify;
+  -moz-justify-content: $justify;
+  -ms-justify-content: $justify;
+  justify-content: $justify;
+  -ms-flex-pack: $justify;
+}
+
+@mixin align-items($align) {
+  -webkit-align-items: $align;
+  -moz-align-items: $align;
+  -ms-align-items: $align;
+  align-items: $align;
+}
+
+@mixin flex($values) {
+  -webkit-box-flex: $values;
+  -moz-box-flex: $values;
+  -webkit-flex: $values;
+  -ms-flex: $values;
+  flex: $values;
+}
+
+@mixin flex-direction($direction) {
+  -webkit-flex-direction: $direction;
+  -moz-flex-direction: $direction;
+  -ms-flex-direction: $direction;
+  flex-direction: $direction;
+}
+
+@mixin position($position, $args) {
+  @each $o in top right bottom left {
+    $i: index($args, $o);
+
+    @if $i and $i+1 <=length($args) and type-of(nth($args, $i + 1))==number {
+      #{$o}: nth($args, $i + 1);
+    }
+  }
+
+  position: $position;
+}
+
+$breakpoints: ('mobile' : (max-width : 767px),
+'iPad' : (min-width : 768px),
+'iPadPro': (min-width: 1024px),
+'medium': (min-width : 992px),
+'large' : (min-width: 1200px),
+'custom': (min-height : 40em));
+
+@mixin breakpoint($minname, $maxname: "") {
+  @if map-has-key($breakpoints, $minname) {
+    @if map-has-key($breakpoints, $maxname) {
+      @media #{inspect(map-get($breakpoints, $minname))} and #{inspect(map-get($breakpoints, $maxname))} {
+        @content;
+      }
+    }
+
+    @else {
+      @media #{inspect(map-get($breakpoints, $minname))} {
+        @content;
+      }
+    }
+  }
+
+  @else {
+    @warn "Couldn't find a breakpoint named `#{$minname}`.";
+  }
+}
+
+$fontArgs: ('f': font-family,
+'s': font-size,
+'c': color,
+'w': font-weight,
+'l': line-height);
+
+@mixin setFont($args) {
+  @each $o in f s c w l {
+    $i: index($args, $o);
+
+    @if $i and $i+1 <=length($args) {
+      #{inspect(map-get($fontArgs, $o))}: nth($args, $i + 1);
+    }
+  }
+}
+
+%code {
+  @include selection();
+  @include setFont(f $codeFamily s 0.8em c $color3 l 1.5em);
+  display: block;
+  white-space: pre;
+  background-color: $codeBg;
+  padding: 0 15px;
+  min-width: 250px;
+  min-height: 250px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $family;
+
+  #_toast {
+    @include position(fixed, bottom -100px left 0px right 0px);
+    z-index: 10;
+    width: 235px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #000000;
+    color: $color1;
+    transition: bottom 0.5s ease-in-out;
+    margin: auto;
+    border: 1px solid $color1;
+    text-align: center;
+
+    &._show {
+      bottom: 30px;
+    }
+  }
+}
+
+footer {
+  @include flexbox();
+  @include align-items(center);
+  @include justify-content(space-between);
+  @include position(absolute, bottom 0px);
+  padding: $pad;
+  width: 100%;
+  background-color: $background;
+  color: $color1;
+
+  a {
+    color: $color3;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-variant: petite-caps;
+    font-size: 1.2em;
+  }
+
+  .author {
+    @include flex(1);
+  }
+
+  .meta {
+    @include flex(1);
+    text-align: right;
+  }
+}
+
+.sassease {
+  @include position(fixed, top 0px left 0px right 0px);
+  background-color: $background;
+  padding: $pad;
+  height: calc(100% - 40px);
+  overflow: auto;
+
+  h1 {
+    color: $color1;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  h3 {
+    color: $color2;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .code {
+    @include flexbox();
+    @include align-items(flex-start);
+    @include justify-content(space-evenly);
+
+    @include breakpoint(mobile) {
+      @include flex-direction(column);
+    }
+
+    .code-block {
+      &:nth-child(2) {
+        margin: auto 10px;
+      }
+
+      @include breakpoint(mobile) {
+        margin: auto;
+        min-width: 280px;
+        max-width: 280px;
+        overflow-x: auto;
+
+        &:nth-child(2) {
+          margin: 10px auto;
+        }
+      }
+
+      label {
+        display: block;
+        background-color: #16181c;
+        color: $color3;
+        padding: 5px 15px;
+        border-bottom: 1px solid black;
+      }
+    }
+
+    .codeBox {
+      @extend %code;
+    }
+  }
+
+  .content {
+    margin-top: 2em;
+  }
+}
+
+/* default styles end */
+
+/* ******************************************* */
+
+/* Mixin styles */
+
+/* Mixin styles end */

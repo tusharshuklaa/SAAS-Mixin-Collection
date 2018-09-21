@@ -1,11 +1,12 @@
-# SASSEase - A Mixins Lab
+# SaSSEase - A Mixins Lab
 
 A hand-picked collection of useful SAAS Mixins for most of the usual styling tasks. The collection holds various mixins from multiple articles online, stackoverflow and written by me.
 
 ## List of Mixins
-* [Mixin 1](http://www.google.com) - Test mixin with descripion here
+* [Box](https://codepen.io/tusharshukla/pen/MqxaKZ) - Create a box by providing width and height as parameters. If height is not provided, width is taken as default for height and the box becomes a square.
 ```
-Example of Mixin 1
+@include box(100px);
+@include box(200px, 100px);
 ```
 * [Mixin 2](http://www..google.com) - Test mixin with descripion here
 ```
@@ -31,7 +32,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code of conduct, a
 
 ## Disclaimer
 
-* All the mixins mentioned in this file are either written by me or taken from online sources such as stackoverflow, css-tricks and other articles found online. Some of them also have been taken from somewhere and then modified by me as per my needs. If someone happens to own some piece of it, let me know and I'll add the reference to it.
+All the mixins mentioned in this file are either written by me or taken from online sources such as stackoverflow, css-tricks and other articles found online. Some of them also have been taken from somewhere and then modified by me as per my needs. If someone happens to own some piece of it, let me know and I'll add the reference to it.
 
 ## Acknowledgments
 
@@ -39,6 +40,6 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code of conduct, a
 * [**Stackoverflow**](https://stackoverflow.com/)
 
 ## Github Repo URL
-* [**SaSSEase - A Mixins Lab**](https://github.com/tusharshuklaa/SaSSEase---A-Mixins-Lab)
+[**SaSSEase - A Mixins Lab**](https://github.com/tusharshuklaa/SaSSEase---A-Mixins-Lab)
 
 

@@ -150,7 +150,14 @@ color: red;
 }
 */
 
-$breakpoints: ( 'tiny' : ( max-width : 767px), 'small' : ( min-width : 768px), 'small1': ( max-width: 1023px), 'medium': ( min-width : 992px), 'large' : ( min-width: 1200px), 'custom': ( min-height : 40em));
+$breakpoints: ( 
+    'mobile' : ( max-width : 767px), 
+    'iPad' : ( min-width : 768px), 
+    'iPadPro': ( min-width: 1024px), 
+    'medium': ( min-width : 992px), 
+    'large' : ( min-width: 1200px), 
+    'custom': ( min-height : 40em)
+);
 @mixin breakpoint($minname, $maxname: "") {
     @if map-has-key($breakpoints, $minname) {
         @if map-has-key($breakpoints, $maxname) {
@@ -158,12 +165,14 @@ $breakpoints: ( 'tiny' : ( max-width : 767px), 'small' : ( min-width : 768px), '
                 @content;
             }
         }
+
         @else {
             @media #{inspect(map-get($breakpoints, $minname))} {
                 @content;
             }
         }
     }
+
     @else {
         @warn "Couldn't find a breakpoint named `#{$minname}`.";
     }
@@ -372,4 +381,34 @@ Usage:
     }
 }
 
+@mixin selection() {
+
+    &::-moz-selection,
+    ::selection {
+        @content;
+    }
+}
+
 /* ******************************************* */
+
+@mixin touch-device() {
+    @media (hover: none) {
+        @content;
+    }
+}
+
+$fontArgs: ('f': font-family,
+'s': font-size,
+'c': color,
+'w': font-weight,
+'l': line-height);
+
+@mixin setFont($args) {
+    @each $o in f s c w l {
+        $i: index($args, $o);
+
+        @if $i and $i+1 <=length($args) {
+            #{inspect(map-get($fontArgs, $o))}: nth($args, $i + 1);
+        }
+    }
+}
