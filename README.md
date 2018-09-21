@@ -3,7 +3,7 @@
 A hand-picked collection of useful SAAS Mixins for most of the usual styling tasks. The collection holds various mixins from multiple articles online, stackoverflow and written by me.
 
 ## List of Mixins
-* [Mixin 1](http://www.google.com) - Test mixin with descripion here
+* <a id="se_box" href="https://codepen.io/tusharshukla/pen/MqxaKZ">Box</a> - Create a box by providing width and height as parameters. If height is not provided, width is taken as default for height and the box becomes a square.
 ```
 Example of Mixin 1
 ```
