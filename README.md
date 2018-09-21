@@ -7,6 +7,7 @@ A hand-picked collection of useful SAAS Mixins for most of the usual styling tas
 ```
 @include box(100px);
 @include box(200px, 100px);
+@include box(calc(100% - 50px), 100px);
 ```
 * [Mixin 2](http://www..google.com) - Test mixin with descripion here
 ```
