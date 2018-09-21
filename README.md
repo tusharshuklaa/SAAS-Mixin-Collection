@@ -1,6 +1,6 @@
-# SAAS-Mixin-Collection
+# SASSEase - A Mixins Lab
 
-A hand-picked collection of useful SAAS Mixins for most of the usual styling tasks. The collection holds various mixins from multiple articles online, stackoverflow and a few written by me.
+A hand-picked collection of useful SAAS Mixins for most of the usual styling tasks. The collection holds various mixins from multiple articles online, stackoverflow and written by me.
 
 ## List of Mixins
 * [Mixin 1](http://www.google.com) - Test mixin with descripion here
@@ -14,9 +14,9 @@ Example of Mixin 2
 
 ## Important
 All of the mixins are tried and tested hence they should serve their exact purpose.
-All the mixins are heavily documented so as to make them very easy to understand and use
+All the mixins are well documented so as to make them very easy to understand and use
 
-Continuous additions/improvements of mixins are happening in this repository 
+Continuous additions/improvements of mixins are happening in this repository so keep a watch :)
 
 ## Authors
 
@@ -29,8 +29,16 @@ You can send me an email at [tusharshuklaa@gmail.com](mailto:tusharshuklaa@gmail
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code of conduct, and the process for submitting pull requests.
 
+## Disclaimer
+
+* All the mixins mentioned in this file are either written by me or taken from online sources such as stackoverflow, css-tricks and other articles found online. Some of them also have been taken from somewhere and then modified by me as per my needs. If someone happens to own some piece of it, let me know and I'll add the reference to it.
+
 ## Acknowledgments
 
-* To be added
+* [**CSS-Tricks**](https://css-tricks.com/)
+* [**Stackoverflow**](https://stackoverflow.com/)
+
+## Github Repo URL
+* [**SaSSEase - A Mixins Lab**](https://github.com/tusharshuklaa/SaSSEase---A-Mixins-Lab)
 
 
