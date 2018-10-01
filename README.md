@@ -39,6 +39,7 @@ All the mixins mentioned in this file are either written by me or taken from onl
 
 * [**CSS-Tricks**](https://css-tricks.com/)
 * [**Stackoverflow**](https://stackoverflow.com/)
+* [**Developer Mozilla (Flexbox mixins)**](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Mixins)
 
 ## Github Repo URL
 [**SaSSEase - A Mixins Lab**](https://github.com/tusharshuklaa/SaSSEase---A-Mixins-Lab)
