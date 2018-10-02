@@ -18,6 +18,7 @@ $selColor: #00e676;
 $color1: #e3f2fd;
 $color2: #b1bfca;
 $color3: #ffffff;
+$color4: #16181c;
 
 /* _variables end */
 
@@ -71,7 +72,7 @@ $color3: #ffffff;
   flex-direction: $direction;
 }
 
-@mixin position($position, $args) {
+@mixin position($position, $args: null) {
   @each $o in top right bottom left {
     $i: index($args, $o);
 
@@ -131,10 +132,13 @@ $fontArgs: ('f': font-family,
   @include setFont(f $codeFamily s 0.8em c $color3 l 1.5em);
   display: block;
   white-space: pre;
-  background-color: $codeBg;
   padding: 0 15px;
   min-width: 250px;
   min-height: 250px;
+
+  @include breakpoint(mobile) {
+    margin-top: 25px;
+  }
 }
 
 * {
@@ -189,7 +193,6 @@ footer {
   }
 
   .meta {
-    @include flex(1);
     text-align: right;
   }
 }
@@ -223,14 +226,15 @@ footer {
     }
 
     .code-block {
+      background-color: $codeBg;
+
       &:nth-child(2) {
         margin: auto 10px;
       }
 
       @include breakpoint(mobile) {
         margin: auto;
-        min-width: 280px;
-        max-width: 280px;
+        width: 80%;
         overflow-x: auto;
 
         &:nth-child(2) {
@@ -239,11 +243,12 @@ footer {
       }
 
       label {
-        display: block;
-        background-color: #16181c;
+        display: inline-block;
+        background-color: $color4;
         color: $color3;
         padding: 5px 15px;
         border-bottom: 1px solid black;
+        width: 100%;
       }
     }
 
