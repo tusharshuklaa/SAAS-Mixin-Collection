@@ -1,3 +1,5 @@
+![picture alt](https://raw.githubusercontent.com/tusharshuklaa/SaSSEase---A-Mixins-Lab/master/logo.png "SaSSEase - A Mixins Lab")
+
 # SaSSEase - A Mixins Lab
 
 A hand-picked collection of useful SAAS Mixins for most of the usual styling tasks. The collection holds various mixins from multiple articles online, stackoverflow and written by me.
