@@ -12,10 +12,22 @@ I have demonstrated all of the mixins in codepen (links in mixin name below). Th
 @include box(200px, 100px);
 @include box(calc(100% - 50px), 100px);
 ```
-* [Mixin 2](http://www..google.com) - Test mixin with descripion here
+* [Position](https://codepen.io/tusharshukla/full/mzepjv/) - Define position of an element as fixed/absolute/relative/static with top, left, margin etc values in no specific order
 ```
-Example of Mixin 2
+@include position("fixed" top 100px right 5px);
 ```
+  * [Fixed](https://codepen.io/tusharshukla/full/mzepjv/) - Uses position mixin and passes first argument as 'fixed' by default for quick use
+  ```
+  @include fixed(top 100px left 0 right 0);
+  ```
+  * [Absolute](https://codepen.io/tusharshukla/full/mzepjv/) - Uses position mixin and passes first argument as 'absolute' by default for quick use
+  ```
+  @include absolute(top 100px left 0 right 0);
+  ```
+  * [Relative](https://codepen.io/tusharshukla/full/mzepjv/) - Uses position mixin and passes first argument as 'relative' by default for quick use
+  ```
+  @include relative(margin-top 100px );
+  ```
 
 ## Important
 All of the mixins are tried and tested hence they should serve their exact purpose.

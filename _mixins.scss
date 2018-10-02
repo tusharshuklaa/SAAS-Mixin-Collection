@@ -3,13 +3,13 @@
 
 /* #region Make a box */
 /*
-    Name: Box
-    Desc: Create a box by providing width and height. If height is not provided then it uses width value as height
+    Name : Box
+    Desc : Create a box by providing width and height. If height is not provided then it uses width value as height
     Usage: 
-    .my-rectangle {
+    %rectangle {
         @include size(400px, 200px);
     }
-    .my-square {
+    %square {
         @include size(400px);
     }
 */
@@ -21,19 +21,22 @@
 
 /* #endregion */
 
+/* ******************************************* */
 
 /* #region Position */
+
 /*
-    Name: Position
-    Desc: Define position of an element as relative, absolute or fixed with top, left, margin etc values in no specific order
+    Name : Position
+    Desc : Define position of an element as relative, absolute or fixed with top, left, margin etc values in no specific order
     Usage: 
-    .float-btn {
+    %float-btn {
         @include position("fixed" top 100px right 5px);
     }
 */
 
+$positionList: (top right bottom left margin margin-top margin-bottom margin-left margin-right);
 @mixin position($position, $args) {
-    @each $o in top right bottom left {
+    @each $o in $positionList {
         $i: index($args, $o);
         @if $i and $i+1 <=length($args) and type-of(nth($args, $i + 1))==number {
             #{$o}: nth($args, $i + 1);
@@ -42,13 +45,13 @@
     position: $position;
 }
 
-/* *******************************************
+/* 
     Name: Absolute
     Desc: Define position of an element as absolute with top, left, margin etc values in no specific order
     Dependent on: Position
     Usage: 
-    .float-btn {
-        @include absolute(top 100px right 5px);
+    %footer {
+        @include absolute(bottom 0px left 0px right 0px);
     }
 */
 
@@ -56,60 +59,40 @@
     @include position("absolute", $args);
 }
 
-/* *******************************************
-
-Name: Fixed
-Desc: Define position of an element as fixed with top, left, margin etc values in no specific order
-Dependent on: Position
-Usage: 
-.float-btn {
-    @include fixed(top 100px right 5px);
-}
-
-*/
-
-@mixin fixed($args) {
-    @include position("fixed", $args);
-}
-
-/* #endregion */
-
-
-
-
-/* ******************************************* */
-
-/*
-Position mixin
-Usage:
-.element {
-@include absolute(top 0 left 1em);
-}
-*/
-
-@mixin position($position, $args) {
-    @each $o in top right bottom left {
-        $i: index($args, $o);
-        @if $i and $i+1 <=length($args) and type-of(nth($args, $i + 1))==number {
-            #{$o}: nth($args, $i + 1);
-        }
+/* 
+    Name: Fixed
+    Desc: Define position of an element as fixed with top, left, margin etc values in no specific order
+    Dependent on: Position
+    Usage: 
+    %sticky {
+        @include fixed(top 100px right 5px);
     }
-    position: $position;
-}
 
-@mixin absolute($args) {
-    @include position("absolute", $args);
-}
+*/
 
 @mixin fixed($args) {
     @include position("fixed", $args);
 }
+
+/* 
+    Name: Relative
+    Desc: Define position of an element as relative with top, left, margin etc values in no specific order
+    Dependent on: Position
+    Usage: 
+    %section {
+        @include relative(margin auto);
+    }
+
+*/
 
 @mixin relative($args) {
     @include position("relative", $args);
 }
 
+/* #endregion */
+
 /* ******************************************* */
+
 
 /*
 Prefix mixin
