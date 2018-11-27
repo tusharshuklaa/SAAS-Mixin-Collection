@@ -517,3 +517,18 @@ $fontArgs: ('f': font-family,
         }
     }
 }
+
+// Write firefox specific CSS
+@mixin firefox {
+    @-moz-document url-prefix() {
+        @content;
+    }
+}
+
+// Write IE specific CSS
+@mixin IE {
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        @content;
+    }
+}
+
