@@ -532,3 +532,43 @@ $fontArgs: ('f': font-family,
     }
 }
 
+// BEM Mixins
+
+// Make Element
+// Usage:
+// .block {
+//     @include e(item) {
+//         // styles here
+//     }
+// }
+// 
+// Output:
+// .block__item {
+//     // styles here
+// }
+
+@mixin e($element) {
+    &__#{$element} {
+        @content;
+    }
+}
+
+// Make Modifier
+// Usage:
+// .block {
+//     @include m(active) {
+//         // styles here
+//     }
+// }
+// 
+// Output:
+// .block--active {
+//     // styles here
+// }
+@mixin m($modifier) {
+    &--#{$modifier} {
+        @content;
+    }
+}
+
+// End BEM Mixins
