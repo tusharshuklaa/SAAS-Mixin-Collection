@@ -1,7 +1,8 @@
 // Author: Tushar Shukla
 // Github Repo: https://github.com/tusharshuklaa/SaSSEase---A-Mixins-Lab
 
-/* #region Make a box */
+//#region Make a box
+
 /*
     Name : Box
     Desc : Create a box by providing width and height. If height is not provided then it uses width value as height
@@ -19,11 +20,9 @@
     height: $height;
 }
 
-/* #endregion */
+//#endregion
 
-/* ******************************************* */
-
-/* #region Position */
+//#region Position
 
 /*
     Name : Position
@@ -91,20 +90,21 @@ $positionList: (top right bottom left margin margin-top margin-bottom margin-lef
 
 /* #endregion */
 
-/* ******************************************* */
+//#region Vendor Prefix
 
+/* 
+    Name: Prefix
+    Desc: Add vendor prefixes to multiple properties. Expects a SCSS MAP of properties.
+    Usage: 
+    .some-element {
+        @include prefix((
+            column-count: 3,
+            column-gap: 1em,
+            column-rule: 1px solid silver,
+            column-width: 20em
+        )), webkit moz);
+    }
 
-/*
-Prefix mixin
-Usage:
-.other-element {
-@include prefix((
-  column-count: 3,
-  column-gap: 1em,
-  column-rule: 1px solid silver,
-  column-width: 20em
-)), webkit moz);
-}
 */
 
 @mixin prefix($map, $vendors: webkit moz ms o) {
@@ -119,18 +119,24 @@ Usage:
     }
 }
 
-/* ******************************************* */
+//#endregion
 
-/*
-Breakpoints mixin
-Usage:
-.element {
-color: red;
+//#region Breakpoints
 
-@include breakpoint(medium) {
-  color: blue;
-}
-}
+/* 
+    Name: Breakpoint
+    Desc: Easily add media query to a block of SCSS by just providing pre-defined screen name(s). It accepts a mandatory
+        parameter for lower limit and an optional parameter for upper limit. The map can be tweaked as per own needs.
+    Dependent on: $breakpoints MAP
+    Usage: 
+    .element {
+        color: red;
+
+        @include breakpoint(mobile) {
+            color: blue;
+        }
+    }
+
 */
 
 $breakpoints: ( 
@@ -141,6 +147,7 @@ $breakpoints: (
     'large' : ( min-width: 1200px), 
     'custom': ( min-height : 40em)
 );
+
 @mixin breakpoint($minname, $maxname: "") {
     @if map-has-key($breakpoints, $minname) {
         @if map-has-key($breakpoints, $maxname) {
@@ -161,14 +168,18 @@ $breakpoints: (
     }
 }
 
-/* ******************************************* */
+//#endregion
 
-/*
-Opacity mixin
-Usage:
-.faded-text {
-@include opacity(0.8);
-}
+//#region Opacity
+
+/* 
+    Name: Opacity
+    Desc: Add opacity to an element. It supports IE prefix as well.
+    Usage: 
+    .faded-text {
+        @include opacity(0.8);
+    }
+
 */
 
 @mixin opacity($opacity) {
@@ -177,17 +188,26 @@ Usage:
     filter: alpha(opacity=$opacity-ie); //IE8
 }
 
-/* ******************************************* */
+//#endregion
 
-/*
-
-*/
+//#region Flexbox
 
 // --------------------------------------------------
 // Flexbox SASS mixins
 // The spec: http://www.w3.org/TR/css3-flexbox
 // --------------------------------------------------
-// Flexbox display
+
+/* 
+    Name: Flexbox
+    Desc: Add display: flex to an element along with vendor prefixes.
+    Dependent on: 
+    Usage: 
+    .element {
+        @include flexbox;
+    }
+
+*/
+
 @mixin flexbox {
     display: -webkit-box;
     display: -moz-box;
@@ -198,8 +218,16 @@ Usage:
 }
 
 
-// Inline-flex
-// Usage: %inline-flex { @include inline-flex; }
+/* 
+    Name: Inline Flex
+    Desc: Add display: inline-flex to an element along with vendor prefixes.
+    Dependent on: 
+    Usage: 
+    .element {
+        @include inline-flex;
+    }
+
+*/
 @mixin inline-flex {
     display: -webkit-inline-box;
     display: -moz-inline-box;
@@ -208,9 +236,19 @@ Usage:
     display: inline-flex;
 }
 
-// The 'flex' shorthand
-// - applies to: flex items
-// <positive-number>, initial, auto, or none
+/* 
+    Name: Flex
+    Desc: The 'flex' shorthand. Adds flex shorthand (flex-grow, flex-shrink and flex-basis) to an element along with
+        required vendor prefixes. It applies to flex items only.
+        Possible values: <positive-number>, initial, auto, or none
+    Dependent on: 
+    Usage: 
+    .element {
+        @include flex(0, 0, 50vw);
+    }
+
+*/
+
 @mixin flex($fg: 1, $fs: 0, $fb: auto) {
 
     // Set a variable to be used by box-flex properties
@@ -229,9 +267,18 @@ Usage:
     flex: $fg $fs $fb;
 }
 
-// Flex Flow Direction
-// - applies to: flex containers
-// row | row-reverse | column | column-reverse
+/* 
+    Name: Flex Direction
+    Desc: It defines the flex flow direction and is applied to flex containers only.
+        Possible values: row | row-reverse | column | column-reverse
+    Dependent on: 
+    Usage: 
+    .element {
+        @include flex-direction(column);
+    }
+
+*/
+
 @mixin flex-direction($direction: row) {
     @if $direction==row-reverse {
         -webkit-box-direction: reverse;
@@ -441,6 +488,8 @@ Usage:
 
     align-self: $value;
 }
+
+//#endregion
 
 /* ******************************************* */
 
