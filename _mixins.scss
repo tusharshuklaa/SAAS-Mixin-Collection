@@ -737,6 +737,28 @@ $fontArgs: ('f': font-family,
     }
 }
 
+/*
+    Name: Gradient Text Color
+    Desc: It adds a gradient color to text
+    Usage:
+    .element {
+        @include GradientTextColor(to bottom right, red , blue);
+    }
+
+*/
+@mixin GradientTextColor($gradient) {
+    background: linear-gradient($gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: slice;
+    -webkit-box-decoration-break: clone;
+
+    // IE doesn't support gradient text color hence un-doing it.
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        background: none;
+    }
+}
+
 //#endregion
 
 //#region Browser Specific
