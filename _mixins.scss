@@ -1,7 +1,7 @@
 // Author: Tushar Shukla
 // Github Repo: https://github.com/tusharshuklaa/SaSSEase---A-Mixins-Lab
 
-//#region Make a box
+//#region Setting element dimensions
 
 /*
     Name : Box
@@ -20,6 +20,37 @@
     height: $height;
 }
 
+/*
+    Name : Modern Width
+    Desc : It defines modern properties of width with proper vendor prefixes.
+        No IE support for modern values
+    Usage: 
+    .element{
+        @include width(min-content);
+    }
+    .myElement {
+        @include width(400px);
+    }
+    Reference: https://css-tricks.com/almanac/properties/w/width/
+*/
+@mixin width($property, $value) {
+    @if $value==fit-content or $value==min-content or $value==max-content {
+        #{$property}: -webkit-#{$value};
+        #{$property}: -moz-#{$value};
+        #{$property}: $value;
+    }
+
+    @else if $value==fill-available or $value==available {
+        #{$property}: -webkit-fill-available;
+        #{$property}: -moz-available;
+        #{$property}: fill-available;
+    }
+
+    @else {
+        #{$property}: $value;
+    }
+}
+
 //#endregion
 
 //#region Position
@@ -34,13 +65,16 @@
 */
 
 $positionList: (top right bottom left margin margin-top margin-bottom margin-left margin-right);
+
 @mixin position($position, $args) {
     @each $o in $positionList {
         $i: index($args, $o);
+
         @if $i and $i+1 <=length($args) and type-of(nth($args, $i + 1))==number {
             #{$o}: nth($args, $i + 1);
         }
     }
+
     position: $position;
 }
 
@@ -108,13 +142,16 @@ $positionList: (top right bottom left margin margin-top margin-bottom margin-lef
 */
 
 @mixin prefix($map, $vendors: webkit moz ms o) {
+
     @each $prop,
     $value in $map {
         @if $vendors {
             @each $vendor in $vendors {
                 #{"-" + $vendor + "-" + $prop}: #{$value};
             }
-        } // Dump regular property anyway
+        }
+
+        // Dump regular property anyway
         #{$prop}: #{$value};
     }
 }
@@ -139,32 +176,41 @@ $positionList: (top right bottom left margin margin-top margin-bottom margin-lef
 
 */
 
-$breakpoints: ( 
-    'mobile' : ( max-width : 767px), 
-    'iPad' : ( min-width : 768px), 
-    'iPadPro': ( min-width: 1024px), 
-    'medium': ( min-width : 992px), 
-    'large' : ( min-width: 1200px), 
-    'custom': ( min-height : 40em)
-);
+$breakpoints: ('mobile' : (max-width : 767px),
+    'iPad' : (min-width : 768px),
+    'iPadPro': (min-width: 1024px),
+    'medium': (min-width : 992px),
+    'large' : (min-width: 1200px),
+    'landscape': (orientation: landscape),
+    'custom': (min-height : 40em));
 
-@mixin breakpoint($minname, $maxname: "") {
-    @if map-has-key($breakpoints, $minname) {
-        @if map-has-key($breakpoints, $maxname) {
-            @media #{inspect(map-get($breakpoints, $minname))} and #{inspect(map-get($breakpoints, $maxname))} {
+@mixin breakpoint($breakpoint1, $breakpoint2: "") {
+
+    // Check if first breakpoint is provided
+    @if map-has-key($breakpoints, $breakpoint1) {
+
+        // Check if second breakpoint is provided as well
+        @if map-has-key($breakpoints, $breakpoint2) {
+            @media screen and #{inspect(map-get($breakpoints, $breakpoint1))} and #{inspect(map-get($breakpoints, $breakpoint2))} {
                 @content;
             }
         }
 
         @else {
-            @media #{inspect(map-get($breakpoints, $minname))} {
+            @media screen and #{inspect(map-get($breakpoints, $breakpoint1))} {
                 @content;
             }
         }
     }
 
     @else {
-        @warn "Couldn't find a breakpoint named `#{$minname}`.";
+        @warn "Couldn't find a breakpoint named `#{$breakpoint1}`.";
+    }
+}
+
+@mixin touch-device() {
+    @media (hover: none) {
+        @content;
     }
 }
 
@@ -199,7 +245,8 @@ $breakpoints: (
 
 /* 
     Name: Flexbox
-    Desc: Add display: flex to an element along with vendor prefixes.
+    Desc: Add display: flex to an element along with vendor prefixes.  Optional parameter for applying
+    !important on the property. Parameter value can be anything (literally) but not null.
     Dependent on: 
     Usage: 
     .element {
@@ -208,19 +255,31 @@ $breakpoints: (
 
 */
 
-@mixin flexbox {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
+@mixin flexbox($imp: null) {
+    @if ($imp !=null) {
+        display: -webkit-box !important;
+        display: -moz-box !important;
+        display: -ms-flexbox !important;
+        display: -webkit-flex !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+    }
+
+    @else {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
 }
 
 
 /* 
     Name: Inline Flex
-    Desc: Add display: inline-flex to an element along with vendor prefixes.
+    Desc: Add display: inline-flex to an element along with vendor prefixes. Optional parameter for applying
+    !important on the property. Parameter value can be anything (literally) but not null.
     Dependent on: 
     Usage: 
     .element {
@@ -228,12 +287,22 @@ $breakpoints: (
     }
 
 */
-@mixin inline-flex {
-    display: -webkit-inline-box;
-    display: -moz-inline-box;
-    display: -webkit-inline-flex;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
+@mixin inline-flex($imp: null) {
+    @if ($imp !=null) {
+        display: -webkit-inline-box !important;
+        display: -moz-inline-box !important;
+        display: -webkit-inline-flex !important;
+        display: -ms-inline-flexbox !important;
+        display: inline-flex !important;
+    }
+
+    @else {
+        display: -webkit-inline-box;
+        display: -moz-inline-box;
+        display: -webkit-inline-flex;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+    }
 }
 
 /* 
@@ -313,9 +382,18 @@ $breakpoints: (
     flex-direction: $direction;
 }
 
-// Flex Line Wrapping
-// - applies to: flex containers
-// nowrap | wrap | wrap-reverse
+/* 
+    Name: Flex Wrap
+    Desc: It defines how wrapping should take place in flex containers
+        Possible values: nowrap | wrap | wrap-reverse
+    Dependent on: 
+    Usage: 
+    .element {
+        @include flex-wrap(wrap);
+    }
+
+*/
+
 @mixin flex-wrap($wrap: nowrap) {
     // No Webkit/FF Box fallback.
     -webkit-flex-wrap: $wrap;
@@ -331,9 +409,17 @@ $breakpoints: (
     flex-wrap: $wrap;
 }
 
-// Flex Direction and Wrap
-// - applies to: flex containers
-// <flex-direction> || <flex-wrap>
+/* 
+    Name: Flex Flow
+    Desc: It is a mix of flex direction and wrap properties for flex containers
+        Possible values: <flex-direction> || <flex-wrap>
+    Dependent on: 
+    Usage: 
+    .element {
+        @include flex-flow(row nowrap);
+    }
+
+*/
 @mixin flex-flow($flow: (row nowrap)) {
     // No Webkit/FF Box fallback.
     -webkit-flex-flow: $flow;
@@ -341,9 +427,17 @@ $breakpoints: (
     flex-flow: $flow;
 }
 
-// Display Order
-// - applies to: flex items
-// <integer>
+/* 
+    Name: Flex Order
+    Desc: It defines the order of occurence of elements on web page
+        Possible values: <integer>
+    Dependent on: 
+    Usage: 
+    .element {
+        @include order(2);
+    }
+
+*/
 @mixin order($int: 0) {
     -webkit-box-ordinal-group: $int+1;
     -moz-box-ordinal-group: $int+1;
@@ -352,9 +446,17 @@ $breakpoints: (
     order: $int;
 }
 
-// Flex grow factor
-// - applies to: flex items
-// <number>
+/* 
+    Name: Flex Grow
+    Desc: It defines the factor by which a flex child should grow depending upon space availability
+        Possible values: <integer>
+    Dependent on: 
+    Usage: 
+    .element {
+        @include flex-grow(2);
+    }
+
+*/
 @mixin flex-grow($int: 1) {
     -webkit-box-flex: $int;
     -moz-box-flex: $int;
@@ -363,9 +465,17 @@ $breakpoints: (
     flex-grow: $int;
 }
 
-// Flex shrink
-// - applies to: flex item shrink factor
-// <number> 
+/* 
+    Name: Flex Shrink
+    Desc: It defines the factor by which a flex child should shrink depending upon space availability
+        Possible values: <integer>
+    Dependent on: 
+    Usage: 
+    .element {
+        @include flex-shrink(2);
+    }
+
+*/
 @mixin flex-shrink($int: 0) {
     -webkit-flex-shrink: $int;
     -moz-flex-shrink: $int;
@@ -373,19 +483,32 @@ $breakpoints: (
     flex-shrink: $int;
 }
 
-// Flex basis
-// - the initial main size of the flex item
-// - applies to: flex itemsnitial main size of the flex item
-// <width> 
+/* 
+    Name: Flex Basis
+    Desc: It defines the main size of a flex child/item  initially
+        Possible values: <width>
+    Usage: 
+    .element {
+        @include flex-basis(20%);
+    }
+
+*/
 @mixin flex-basis($value: auto) {
     -webkit-flex-basis: $value;
     flex-basis: $value;
 }
 
-// Axis Alignment
-// - applies to: flex containers
-// flex-start (default) | flex-end | center | space-between | space-around
-// Note: space-* values not supported in older syntaxes.
+/* 
+    Name: Flex Justify Content
+    Desc: It defines the alignment along the main axis within Flex Containers
+    Possible values: flex-start (default) | flex-end | center | space-between | space-around
+    Usage: 
+    .element {
+        @include justify-content(space-between);
+    }
+    Note: space-* values not supported in older syntaxes.
+
+*/
 @mixin justify-content($value: flex-start) {
     @if $value==flex-start {
         -webkit-box-pack: start;
@@ -419,9 +542,16 @@ $breakpoints: (
     justify-content: $value;
 }
 
-// Packing Flex Lines
-// - applies to: multi-line flex containers
-// flex-start | flex-end | center | space-between | space-around | stretch 
+/* 
+    Name: Flex Align Content
+    Desc: It helps aligning a flex container's lines within it when there is extra space in the cross-axis
+    Possible values: flex-start | flex-end | center | space-between | space-around | stretch
+    Usage: 
+    .element {
+        @include align-content(space-between);
+    }
+
+*/
 @mixin align-content($value: stretch) {
     // No Webkit Box Fallback.
     -webkit-align-content: $value;
@@ -441,9 +571,17 @@ $breakpoints: (
     align-content: $value;
 }
 
-// Cross-axis Alignment
-// - applies to: flex containers
-// flex-start | flex-end | center | baseline | stretch (default)
+/* 
+    Name: Flex Align Items
+    Desc: It defines the default behaviour for how flex items are laid out along the cross axis 
+        on the current line within flex containers.
+    Possible values: flex-start | flex-end | center | space-between | space-around | stretch (default)
+    Usage: 
+    .element {
+        @include align-items(space-between);
+    }
+
+*/
 @mixin align-items($value: stretch) {
     @if $value==flex-start {
         -webkit-box-align: start;
@@ -467,9 +605,16 @@ $breakpoints: (
     align-items: $value;
 }
 
-// Cross-axis Alignment
-// - applies to: flex items
-// auto | flex-start | flex-end | center | baseline | stretch 
+/* 
+    Name: Flex Align Self
+    Desc: It makes possible to override the 'align-items' value for specific flex items.
+    Possible values: flex-start | flex-end | center | baseline |  stretch
+    Usage: 
+    .element {
+        @include align-self(center);
+    }
+
+*/
 @mixin align-self($value: auto) {
     // No Webkit Box Fallback.
     -webkit-align-self: $value;
@@ -491,25 +636,7 @@ $breakpoints: (
 
 //#endregion
 
-/* ******************************************* */
-
-/*
-Name: Truncate String
-Desc: Pass max-width (for example: 200px) and text within should have ellipsis effect applied to it
-Usage:
-.title-text {
-@include truncateString(200px);
-}
-*/
-
-@mixin truncateString($max-width) {
-    max-width: $max-width;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-/* ******************************************* */
+//#region Typically SASS
 
 @mixin optional-at-root($sel) {
     @at-root #{if(not &, $sel, selector-append(&, $sel))} {
@@ -517,6 +644,81 @@ Usage:
     }
 }
 
+//#endregion
+
+//#region Text Related
+
+/*
+    Name: Truncate String
+    Desc: Pass max-width (for example: 200px) and text within should have ellipsis effect applied to it
+    Usage:
+    .title-text {
+        @include truncateString(200px);
+    }
+
+*/
+@mixin truncateString($max-width) {
+    max-width: $max-width;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/*
+    Name: Text Selection
+    Desc: Apply CSS when text is selected
+    Usage:
+    .title-text {
+        @include selection() {
+            color: green;
+        };
+    }
+
+*/
+@mixin selection() {
+    &::-moz-selection,
+    ::selection {
+        @content;
+    }
+}
+
+/*
+    Name: Set font
+    Desc: Shorthand for setting multiple font properties like font-family, color, font-weight, line-height
+    Usage:
+    .title-text {
+        @include setFont(f sans-serif c white w 600 l 1em);
+    }
+
+*/
+$fontArgs: ('f': font-family,
+    's': font-size,
+    'c': color,
+    'w': font-weight,
+    'l': line-height);
+
+@mixin setFont($args) {
+    @each $o in f s c w l {
+        $i: index($args, $o);
+
+        @if $i and $i+1 <=length($args) {
+            #{inspect(map-get($fontArgs, $o))}: nth($args, $i + 1);
+        }
+    }
+}
+
+/*
+    Name: Placeholder
+    Desc: It sets placeholder CSS with vendor prefixes
+    Usage:
+    .myInput {
+        @include placeholder() {
+            color: blue;
+            font-weight: 400;
+        };
+    }
+
+*/
 @mixin placeholder {
     @include optional-at-root('::-webkit-input-placeholder') {
         @content;
@@ -535,37 +737,9 @@ Usage:
     }
 }
 
-@mixin selection() {
+//#endregion
 
-    &::-moz-selection,
-    ::selection {
-        @content;
-    }
-}
-
-/* ******************************************* */
-
-@mixin touch-device() {
-    @media (hover: none) {
-        @content;
-    }
-}
-
-$fontArgs: ('f': font-family,
-'s': font-size,
-'c': color,
-'w': font-weight,
-'l': line-height);
-
-@mixin setFont($args) {
-    @each $o in f s c w l {
-        $i: index($args, $o);
-
-        @if $i and $i+1 <=length($args) {
-            #{inspect(map-get($fontArgs, $o))}: nth($args, $i + 1);
-        }
-    }
-}
+//#region Browser Specific
 
 // Write firefox specific CSS
 @mixin firefox {
@@ -576,25 +750,30 @@ $fontArgs: ('f': font-family,
 
 // Write IE specific CSS
 @mixin IE {
-    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+    @media screen and (-ms-high-contrast: active),
+    (-ms-high-contrast: none) {
         @content;
     }
 }
 
-// BEM Mixins
+//#endregion
 
-// Make Element
-// Usage:
-// .block {
-//     @include e(item) {
-//         // styles here
-//     }
-// }
-// 
-// Output:
-// .block__item {
-//     // styles here
-// }
+//#region BEM (block Element Modifier)
+
+/*
+    Name : BEM Element
+    Desc : Shorthand to define element of a block as per BEM
+    Usage: 
+    .block {
+        width: 100%;
+        @include e(elem) {
+            width: auto;
+        };
+    }
+    Output =>  .block { width: 100%; }
+                            .block__elem { width: auto; }
+*/
 
 @mixin e($element) {
     &__#{$element} {
@@ -602,22 +781,24 @@ $fontArgs: ('f': font-family,
     }
 }
 
-// Make Modifier
-// Usage:
-// .block {
-//     @include m(active) {
-//         // styles here
-//     }
-// }
-// 
-// Output:
-// .block--active {
-//     // styles here
-// }
+/*
+    Name : BEM Modifier
+    Desc : Shorthand to define modifier of a block or block element as per BEM
+    Usage: 
+    .block {
+        width: 100%;
+        @include m(small) {
+            width: 25%;
+        };
+    }
+    Output =>  .block { width: 100%; }
+                            .block--small { width: 25%; }
+*/
 @mixin m($modifier) {
     &--#{$modifier} {
         @content;
     }
 }
 
-// End BEM Mixins
+//#endregion
+
