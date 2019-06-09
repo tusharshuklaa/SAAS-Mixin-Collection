@@ -1,7 +1,7 @@
 // Author: Tushar Shukla
 // Github Repo: https://github.com/tusharshuklaa/SaSSEase---A-Mixins-Lab
 
-//#region Setting element dimensions
+//#region Element dimensions related
 
 /*
     Name : Box
@@ -48,6 +48,110 @@
 
     @else {
         #{$property}: $value;
+    }
+}
+
+/*
+    Name : Center Known Height
+    Desc : It centers an element vertically if height of the item to be centered is known
+    Usage: 
+    .element{
+        @include centerKnownHeight(500px);
+    }
+    Note: Element to be centered should have 'position: absolute | fixed;' for this to work.
+*/
+@mixin centerKnownHeight($height) {
+    top: 50%;
+    margin-top: -#{$height/2};
+}
+
+/*
+    Name : Center Known Width
+    Desc : It centers an element horizontally if width of the item to be centered is known
+    Usage: 
+    .element{
+        @include centerKnownWidth(500px);
+    }
+    Note: Element to be centered should have 'position: absolute | fixed;' for this to work.
+*/
+@mixin centerKnownWidth($width) {
+    left: 50%;
+    margin-left: -#{$width/2};
+}
+
+/*
+    Name : Center Known Dimensions
+    Desc : It centers an element vertically and horizontally if height and width of the item to be centered is known
+    Usage: 
+    .element{
+        @include centerKnownDimensions(500px, 300px);
+    }
+    Note: Element to be centered should have 'position: absolute | fixed;' for this to work.
+*/
+@mixin centerKnownDimensions($height, $width) {
+    top: 50%;
+    margin-top: -#{$height/2};
+    left: 50%;
+    margin-left: -#{$width/2};
+}
+
+/*
+    Name : Center UnKnown Dimensions
+    Desc : It centers an element vertically and horizontally even if height and width of the item to be centered is unknown
+    Usage: 
+    .element{
+        @include centerKnownHeight(500px);
+    }
+    Note: Element to be centered should have 'position: absolute | fixed;' for this to work.
+*/
+@mixin centerUnknownDimensions($position) {
+    position: $position;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+}
+
+/*
+    Name : Ghost Vertical Align
+    Desc : It centers an element vertically even if height  of the item to be centered is unknown. 
+                    The essence of this mixin relies on property 'vertical-align: middle' of child and a psuedo element of the parent
+    Usage: 
+    .parent{
+        @include GhostVerticalAlign;
+        // May want to do this if there is risk the container may be narrower than the element inside
+        white-space: nowrap;
+
+        .childToBeCentered {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    Note: Mixin is to be applied on parent of element to be centered.
+                    Child item that is to be centered vertically must have 'display: inline-block' and 'vertical-align: middle'.
+    Ref: https://css-tricks.com/centering-in-the-unknown/
+*/
+@mixin GhostVerticalAlign($childToBeCenteredName) {
+    text-align: center;
+
+    &::before {
+        // Setting content to 'Zero-Width-Space'
+        content: '\200B';
+        display: inline-block;
+        height: 100%; 
+        vertical-align: middle;
+        margin-right: -0.25em; /* Adjusts for spacing */
+    }
+
+    // Optional
+    @if ($childToBeCenteredName) { 
+        #{childToBeCenteredName} {
+            display: inline-block;
+            vertical-align: middle;
+        }
     }
 }
 
